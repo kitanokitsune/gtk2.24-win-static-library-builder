@@ -1,5 +1,6 @@
 # gtk2.24-win-static-library-builder
-Build gtk+2.24.33 static library for windows
+Build gtk+-2.24.33 static library for windows  
+I use this library to build [gerbv](https://github.com/gerbv/gerbv).
 
 ## Requirement
 + 7-zip ( C\:\\Program Files\\7-Zip\\7z.exe )
