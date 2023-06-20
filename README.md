@@ -1,5 +1,5 @@
 # gtk2.24-win-static-library-builder
-Build gtk+-2.24.33 static library for windows  
+Build tool of gtk+-2.24.33 static library for windows, using [MXE](https://mxe.cc/) patches.  
 I use this library to build [gerbv](https://github.com/gerbv/gerbv).
 
 ## Requirement
