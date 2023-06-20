@@ -1,0 +1,19 @@
+diff -uprN a/gtk/gtkmarshalers.c b/gtk/gtkmarshalers.c
+--- a/gtk/gtkmarshalers.c	2015-12-11 05:39:42.000000000 +0900
++++ b/gtk/gtkmarshalers.c	2022-09-16 12:32:07.509919400 +0900
+@@ -91,6 +91,7 @@ _gtk_marshal_BOOLEAN__BOXED (GClosure
+ }
+ 
+ /* BOOLEAN:BOXED,BOXED (./gtkmarshalers.list:25) */
++#if 0
+ void
+ _gtk_marshal_BOOLEAN__BOXED_BOXED (GClosure     *closure,
+                                    GValue       *return_value G_GNUC_UNUSED,
+@@ -130,6 +131,7 @@ _gtk_marshal_BOOLEAN__BOXED_BOXED (GClos
+ 
+   g_value_set_boolean (return_value, v_return);
+ }
++#endif
+ 
+ /* BOOLEAN:ENUM (./gtkmarshalers.list:26) */
+ void

@@ -1,0 +1,21 @@
+diff -uprN a/configure b/configure
+--- a/configure	2022-10-09 07:54:37.982768100 +0900
++++ b/configure	2022-10-08 13:55:41.561322800 +0900
+@@ -24496,7 +24496,7 @@ _ACEOF
+ if ac_fn_c_try_link "$LINENO"; then :
+   :
+ else
+-  as_fn_error $? "
++  echo as_fn_error $? "
+ *** Can't link to Pango. Pango is required to build
+ *** GTK+. For more information see http://www.pango.org" "$LINENO" 5
+ fi
+@@ -24579,7 +24579,7 @@ _ACEOF
+ if ac_fn_c_try_link "$LINENO"; then :
+   :
+ else
+-  as_fn_error $? "
++  echo as_fn_error $? "
+                 *** Cannot link to Accessibility Toolkit. Accessibility Toolkit is required
+                 *** to build GTK+" "$LINENO" 5
+ fi

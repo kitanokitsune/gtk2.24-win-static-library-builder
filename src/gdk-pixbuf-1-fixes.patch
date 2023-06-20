@@ -1,0 +1,54 @@
+This file is part of MXE. See LICENSE.md for licensing information.
+
+Contains ad hoc patches for cross building.
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: v1993 <v19930312@gmail.com>
+Date: Mon, 6 Dec 2021 21:38:36 +0300
+Subject: [PATCH 1/2] Fix static builds for Windows
+
+
+diff --git a/gdk-pixbuf/gdk-pixbuf-io.c b/gdk-pixbuf/gdk-pixbuf-io.c
+index 1111111..2222222 100644
+--- a/gdk-pixbuf/gdk-pixbuf-io.c
++++ b/gdk-pixbuf/gdk-pixbuf-io.c
+@@ -186,8 +186,9 @@ get_file_formats (void)
+ 
+ /* DllMain function needed to tuck away the gdk-pixbuf DLL handle */
+ 
+-static HMODULE gdk_pixbuf_dll;
++static HMODULE gdk_pixbuf_dll = NULL;
+ 
++#ifdef DLL_EXPORT
+ BOOL WINAPI
+ DllMain (HINSTANCE hinstDLL,
+          DWORD     fdwReason,
+@@ -203,6 +204,8 @@ DllMain (HINSTANCE hinstDLL,
+ }
+ #endif
+ 
++#endif
++
+ 
+ #ifdef GDK_PIXBUF_RELOCATABLE
+ 
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: v1993 <v19930312@gmail.com>
+Date: Fri, 10 Dec 2021 18:53:33 +0300
+Subject: [PATCH 2/2] Search for iconv when adding intl
+
+
+diff --git a/meson.build b/meson.build
+index 1111111..2222222 100644
+--- a/meson.build
++++ b/meson.build
+@@ -94,7 +94,7 @@ if cc.has_function('lrint', dependencies: mathlib_dep)
+   gdk_pixbuf_conf.set('HAVE_LRINT', 1)
+ endif
+ 
+-intl_dep = cc.find_library('intl', required: false)
++intl_dep = [ cc.find_library('intl', required: false), cc.find_library('iconv', required: false) ]
+ if cc.has_function('bind_textdomain_codeset', prefix: '#include <libintl.h>', dependencies: intl_dep)
+   gdk_pixbuf_conf.set('HAVE_BIND_TEXTDOMAIN_CODESET', 1)
+ endif

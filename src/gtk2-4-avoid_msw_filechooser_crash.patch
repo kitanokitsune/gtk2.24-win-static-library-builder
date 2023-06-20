@@ -1,0 +1,30 @@
+diff -uprN a/gtk/gtkfilechooserbutton.c b/gtk/gtkfilechooserbutton.c
+--- a/gtk/gtkfilechooserbutton.c	2014-09-30 05:02:17.000000000 +0900
++++ b/gtk/gtkfilechooserbutton.c	2022-10-01 22:10:49.282022500 +0900
+@@ -2959,13 +2959,25 @@ GtkWidget *
+ gtk_file_chooser_button_new (const gchar          *title,
+ 			     GtkFileChooserAction  action)
+ {
++  GtkWidget *object;
++  GtkFileChooserButton *button;
++  GtkFileChooserButtonPrivate *priv;
++
+   g_return_val_if_fail (action == GTK_FILE_CHOOSER_ACTION_OPEN ||
+ 			action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER, NULL);
+ 
+-  return g_object_new (GTK_TYPE_FILE_CHOOSER_BUTTON,
++  object = g_object_new (GTK_TYPE_FILE_CHOOSER_BUTTON,
+ 		       "action", action,
+ 		       "title", (title ? title : _(DEFAULT_TITLE)),
+ 		       NULL);
++
++  if (action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER) {
++    button = GTK_FILE_CHOOSER_BUTTON (object);
++    priv = button->priv;
++    gtk_combo_box_set_active(GTK_COMBO_BOX (priv->combo_box), 0);
++  }
++
++  return object;
+ }
+ 
+ /**

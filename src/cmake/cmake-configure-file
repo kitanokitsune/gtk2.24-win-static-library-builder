@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+exec "/mingw32/bin/cmake" "$@" -P "/gtk2-dev/share/cmake/modules/configure_file.cmake"

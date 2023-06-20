@@ -1,0 +1,200 @@
+diff -uprN a/gtk/gtkrc.c b/gtk/gtkrc.c
+--- a/gtk/gtkrc.c	2020-12-18 14:50:58.000000000 +0900
++++ b/gtk/gtkrc.c	2022-10-02 18:55:43.632505600 +0900
+@@ -847,6 +847,50 @@ gtk_rc_parse_named (GtkRcContext *contex
+       gtk_rc_context_parse_file (context, path, GTK_PATH_PRIO_THEME, FALSE);
+       g_free (path);
+     }
++    else
++    {
++      gtk_rc_parse_string (
++		"gtk-icon-sizes = \"gtk-menu=13,13:gtk-small-toolbar=16,16:gtk-large-toolbar=24,24:gtk-dnd=32,32\"\n"
++		"gtk-toolbar-icon-size = small-toolbar\n"
++		"gtk-button-images = 0\n"
++		"gtk-menu-images = 1\n"
++		"gtk-alternative-button-order = 1\n"
++		"gtk-alternative-sort-arrows = 1\n"
++		"gtk-error-bell = 0\n"
++		"style \"msw-default\"\n"
++		"{\n"
++		"  GtkWidget::interior-focus = 1\n"
++		"  GtkOptionMenu::indicator-size = { 9, 5 }\n"
++		"  GtkOptionMenu::indicator-spacing = { 7, 5, 2, 2 }\n"
++		"  GtkSpinButton::shadow-type = in\n"
++		"  GtkComboBox::appears-as-list = 1\n"
++		"  GtkComboBox::focus-on-click = 0\n"
++		"  GOComboBox::add_tearoffs = 0\n"
++		"  GtkTreeView::allow-rules = 0\n"
++		"  GtkTreeView::expander-size = 12\n"
++		"  GtkExpander::expander-size = 12\n"
++		"  GtkScrolledWindow::scrollbar_spacing = 1\n"
++		"  GtkSeparatorMenuItem::horizontal-padding = 2\n"
++		"  engine \"wimp\" \n"
++		"  {\n"
++		"  }\n"
++		"}\n"
++		"class \"*\" style \"msw-default\"\n"
++		"binding \"ms-windows-tree-view\"\n"
++		"{\n"
++		"  bind \"Right\" { \"expand-collapse-cursor-row\" (1,1,0) }\n"
++		"  bind \"Left\" { \"expand-collapse-cursor-row\" (1,0,0) }\n"
++		"}\n"
++		"class \"GtkTreeView\" binding \"ms-windows-tree-view\"\n"
++		"style \"msw-combobox-thickness\" = \"msw-default\"\n"
++		"{\n"
++		"  xthickness = 0 \n"
++		"  ythickness = 0\n"
++		"}\n"
++		"widget_class \"*TreeView*ComboBox*\" style \"msw-combobox-thickness\"\n"
++		"widget_class \"*ComboBox*GtkFrame*\" style \"msw-combobox-thickness\"\n"
++      );
++    }
+ 
+   g_free (subpath);
+ }
+diff -uprN a/gtk/gtkthemes.c b/gtk/gtkthemes.c
+--- a/gtk/gtkthemes.c	2020-12-18 14:29:40.000000000 +0900
++++ b/gtk/gtkthemes.c	2022-10-02 18:55:43.632505600 +0900
+@@ -61,7 +61,11 @@ static gboolean
+ gtk_theme_engine_load (GTypeModule *module)
+ {
+   GtkThemeEngine *engine = GTK_THEME_ENGINE (module);
+-  
++
++#ifdef G_OS_WIN32
++  extern void _gtk_theme_wimp_init (GTypeModule *);
++  _gtk_theme_wimp_init(module);
++#else
+   gchar *engine_path;
+       
+   engine_path = gtk_rc_find_module_in_path (engine->name);
+@@ -103,6 +107,7 @@ gtk_theme_engine_load (GTypeModule *modu
+   /* setup anything it needs to set up. */
+   engine->init (module);
+ 
++#endif
+   return TRUE;
+ }
+ 
+@@ -111,6 +116,10 @@ gtk_theme_engine_unload (GTypeModule *mo
+ {
+   GtkThemeEngine *engine = GTK_THEME_ENGINE (module);
+ 
++#ifdef G_OS_WIN32
++  extern void _gtk_theme_wimp_exit (void);
++  _gtk_theme_wimp_exit();
++#else
+   engine->exit();
+ 
+   g_module_close (engine->library);
+@@ -119,6 +128,7 @@ gtk_theme_engine_unload (GTypeModule *mo
+   engine->init = NULL;
+   engine->exit = NULL;
+   engine->create_rc_style = NULL;
++#endif
+ }
+ 
+ static void
+@@ -189,8 +199,32 @@ gtk_theme_engine_create_rc_style (GtkThe
+ {
+   g_return_val_if_fail (engine != NULL, NULL);
+ 
++#ifdef G_OS_WIN32
++  extern GtkRcStyle * _gtk_theme_wimp_create_rc_style (void);
++  return _gtk_theme_wimp_create_rc_style ();
++#else
+   return engine->create_rc_style ();
++#endif
+ }
+ 
+ #define __GTK_THEMES_C__
+ #include "gtkaliasdef.c"
++
++#ifdef G_OS_WIN32
++/* redefine deprected */
++#include "gtknotebook.h"
++GType gtk_clist_get_type (void) G_GNUC_CONST;
++#define GTK_TYPE_CLIST            (gtk_clist_get_type ())
++#define GTK_IS_CLIST(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_CLIST))
++#define GTK_WIDGET_VISIBLE(wid)		  ((GTK_WIDGET_FLAGS (wid) & GTK_VISIBLE) != 0)
++void gtk_notebook_query_tab_label_packing (GtkNotebook *notebook,
++					   GtkWidget   *child,
++					   gboolean    *expand,
++					   gboolean    *fill,
++					   GtkPackType *pack_type);
++
++#include "../modules/engines/ms-windows/msw_rc_style.c"
++#include "../modules/engines/ms-windows/msw_style.c"
++#include "../modules/engines/ms-windows/msw_theme_main.c"
++#include "../modules/engines/ms-windows/xp_theme.c"
++#endif
+diff -uprN a/modules/engines/ms-windows/msw_rc_style.c b/modules/engines/ms-windows/msw_rc_style.c
+--- a/modules/engines/ms-windows/msw_rc_style.c	2020-12-18 14:29:40.000000000 +0900
++++ b/modules/engines/ms-windows/msw_rc_style.c	2022-10-02 18:55:43.632505600 +0900
+@@ -27,7 +27,7 @@ static void msw_rc_style_init (MswRcStyl
+ static void msw_rc_style_class_init (MswRcStyleClass * klass);
+ static GtkStyle *msw_rc_style_create_style (GtkRcStyle * rc_style);
+ 
+-static GtkRcStyleClass *parent_class;
++static GtkRcStyleClass *rcparent_class;
+ 
+ GType msw_type_rc_style = 0;
+ 
+@@ -62,7 +62,7 @@ msw_rc_style_class_init (MswRcStyleClass
+ {
+   GtkRcStyleClass *rc_style_class = GTK_RC_STYLE_CLASS (klass);
+ 
+-  parent_class = g_type_class_peek_parent (klass);
++  rcparent_class = g_type_class_peek_parent (klass);
+ 
+   rc_style_class->create_style = msw_rc_style_create_style;
+ }
+diff -uprN a/modules/engines/ms-windows/msw_theme_main.c b/modules/engines/ms-windows/msw_theme_main.c
+--- a/modules/engines/ms-windows/msw_theme_main.c	2020-12-18 14:29:40.000000000 +0900
++++ b/modules/engines/ms-windows/msw_theme_main.c	2022-10-02 18:55:43.648130500 +0900
+@@ -91,8 +91,13 @@ global_filter_func (void *xevent, GdkEve
+     }
+ }
+ 
+-G_MODULE_EXPORT void
+-theme_init (GTypeModule * module)
++#ifdef G_OS_WIN32
++#define MODULE_ENTRY(type, function) type _gtk_theme_wimp_ ## function
++#else
++#define MODULE_ENTRY(type, function) G_MODULE_EXPORT type theme_ ## function
++#endif
++
++MODULE_ENTRY (void, init) (GTypeModule * module)
+ {
+   msw_rc_style_register_type (module);
+   msw_style_register_type (module);
+@@ -114,8 +119,7 @@ theme_init (GTypeModule * module)
+   gdk_window_add_filter (hidden_msg_window, global_filter_func, NULL);
+ }
+ 
+-G_MODULE_EXPORT void
+-theme_exit (void)
++MODULE_ENTRY (void, exit) (void)
+ {
+   gdk_window_remove_filter (hidden_msg_window, global_filter_func, NULL);
+   gdk_window_destroy (hidden_msg_window);
+@@ -129,12 +133,12 @@ theme_exit (void)
+     }
+ }
+ 
+-G_MODULE_EXPORT GtkRcStyle *
+-theme_create_rc_style (void)
++MODULE_ENTRY (GtkRcStyle *, create_rc_style) (void)
+ {
+   return g_object_new (MSW_TYPE_RC_STYLE, NULL);
+ }
+ 
++#ifndef G_OS_WIN32
+ /* The following function will be called by GTK+ when the module
+  * is loaded and checks to see if we are compatible with the
+  * version of GTK+ that loads us.
+@@ -144,3 +148,4 @@ g_module_check_init (GModule *module)
+ {
+   return gtk_check_version (2, 0, 0);
+ }
++#endif
