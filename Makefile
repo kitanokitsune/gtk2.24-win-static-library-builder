@@ -1,6 +1,6 @@
 SEVENZIPBINPATH = /c/Program\ Files/7-Zip/7z.exe
-CPUARCH ?= i686
-#CPUARCH ?= x86_64
+#CPUARCH ?= i686
+CPUARCH ?= x86_64
 GTK_PREFIX ?= /gtk2-dev
 
 CMAKEBINPATH = $(abspath $(shell which cmake))

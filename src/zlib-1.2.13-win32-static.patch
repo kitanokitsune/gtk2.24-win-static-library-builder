@@ -1,0 +1,18 @@
+diff -uprN a/Makefile.in b/Makefile.in
+--- a/Makefile.in	2022-10-13 14:06:55.000000000 +0900
++++ b/Makefile.in	2023-06-15 14:16:35.241500200 +0900
+@@ -306,12 +306,12 @@ install-libs: $(LIBS)
+ 	-@if [ ! -d $(DESTDIR)$(man3dir)      ]; then mkdir -p $(DESTDIR)$(man3dir); fi
+ 	-@if [ ! -d $(DESTDIR)$(pkgconfigdir) ]; then mkdir -p $(DESTDIR)$(pkgconfigdir); fi
+ 	rm -f $(DESTDIR)$(libdir)/$(STATICLIB)
+-	cp $(STATICLIB) $(DESTDIR)$(libdir)
++	[ -z '$(STATICLIB)'  ] || cp $(STATICLIB)  $(DESTDIR)$(libdir)
+ 	chmod 644 $(DESTDIR)$(libdir)/$(STATICLIB)
+ 	-@($(RANLIB) $(DESTDIR)$(libdir)/libz.a || true) >/dev/null 2>&1
+ 	-@if test -n "$(SHAREDLIBV)"; then \
+ 	  rm -f $(DESTDIR)$(sharedlibdir)/$(SHAREDLIBV); \
+-	  cp $(SHAREDLIBV) $(DESTDIR)$(sharedlibdir); \
++	  [ -z '$(SHAREDLIBV)' ] || cp $(SHAREDLIBV) $(DESTDIR)$(sharedlibdir); \
+ 	  echo "cp $(SHAREDLIBV) $(DESTDIR)$(sharedlibdir)"; \
+ 	  chmod 755 $(DESTDIR)$(sharedlibdir)/$(SHAREDLIBV); \
+ 	  echo "chmod 755 $(DESTDIR)$(sharedlibdir)/$(SHAREDLIBV)"; \
