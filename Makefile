@@ -42,7 +42,7 @@ export CPUARCH
 
 ALL_TARGETS := atk bzip2 cairo expat fontconfig freetype freetype-bootstrap fribidi gdk-pixbuf gettext giflib glib gtk2 harfbuzz icu4c jasper jpeg libiconv libpng libwebp lzo pango pixman tiff xz zlib
 
-.PHONY: all clean cleanall test strip fixpc dlpkg gtkvars
+.PHONY: all clean cleanall dlpkg gtkvars test strip fixpc fixla
 
 define CLEAN_PROJECT
 	$(shell echo "----------------" 1>&2 && echo "make -f ./mk/$(1).makefile clean" 1>&2 && make -f ./mk/$(1).makefile clean 1>&2)
@@ -60,6 +60,12 @@ dlpkg: ./pkg/Makefile
 	make && \
 	cd ..
 
+gtkvars: ./src/_gtkvars.sh
+	@echo "#!/bin/bash" > ./gtkvars.sh
+	@echo "GTK2DIR=$(GTK_PREFIX)" >> ./gtkvars.sh
+	@cat ./src/_gtkvars.sh >> ./gtkvars.sh
+	cp -f ./gtkvars.sh $(GTK_PREFIX)
+
 test:
 	@echo "" 1>&2
 	@echo "========= $(@F) =========" 1>&2
@@ -74,6 +80,11 @@ fixpc:
 	@echo "" 1>&2
 	@echo "========= $(@F) =========" 1>&2
 	./src/_fixpc.sh ${GTK_PREFIX}
+
+fixla:
+	@echo "" 1>&2
+	@echo "========= $(@F) =========" 1>&2
+	./src/_fixla.sh ${GTK_PREFIX}
 
 atk: ./mk/atk.makefile glib
 	@echo "" 1>&2
@@ -291,11 +302,6 @@ zlib: ./mk/zlib.makefile
 	touch $(@F) && \
 	make -f ./mk/$(@F).makefile clean
 
-gtkvars: ./src/_gtkvars.sh
-	@echo "#!/bin/bash" > gtkvars.sh
-	@echo "GTK2DIR=$(GTK_PREFIX)" >> gtkvars.sh
-	@cat ./src/_gtkvars.sh >> gtkvars.sh
-
 clean_%: ./mk/%.makefile
 	make -f $< clean
 
@@ -308,4 +314,5 @@ cleanall:
 	$(foreach x,$(ALL_TARGETS),$(call CLEAN_PROJECT,$(x)))
 	@echo "----------------------------" 1>&2
 	rm -f $(ALL_TARGETS)
+	rm -f gtkvars.sh
 

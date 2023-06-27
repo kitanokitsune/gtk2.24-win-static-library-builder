@@ -8,7 +8,7 @@ It is useful to build [gerbv](https://github.com/gerbv/gerbv).
 + mingw-w64 gcc and g++ (win32 thread model, dwarf or seh exception model) \: [**i686-8.1.0-release-win32-dwarf-rt_v6-rev0**](https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win32/Personal%20Builds/mingw-builds/8.1.0/threads-win32/dwarf/) and [**x86_64-8.1.0-release-win32-seh-rt_v6-rev0**](https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win64/Personal%20Builds/mingw-builds/8.1.0/threads-win32/seh/) are tested.
 
 ## How to build
-Clone this project  
-Run msys2 (bash) ***as administrator***  
-Edit `SEVENZIPBINPATH`, `CPUARCH` and `GTK_PREFIX` variables in **Makefile** file  
-Then `make` in msys2 (bash)
+1. Clone this project  
+2. Edit `SEVENZIPBINPATH`, `CPUARCH` and `GTK_PREFIX` variables in **Makefile** file  
+3. Run msys2 (bash) ***as administrator***  
+4. Then `make` in msys2 (bash)
