@@ -1,3 +1,14 @@
+ifeq ($(strip $(USE_POSIX_THREAD)),true)
+    GCC_POSIX_OPT = -static-libgcc -Wl,-Bstatic -lwinpthread
+    GXX_POSIX_OPT = -static-libgcc -static-libstdc++ -Wl,-Bstatic -lwinpthread
+    LD_POSIX_OPT = -static-libgcc -static-libstdc++ -Bstatic -lwinpthread
+else ifeq ($(strip $(USE_POSIX_THREAD)),false)
+    GCC_POSIX_OPT =
+    GXX_POSIX_OPT =
+    LD_POSIX_OPT =
+else
+    $(error USE_POSIX_THREAD invalid value: $(strip $(USE_POSIX_THREAD)))
+endif
 
 gtk2: ./mk/gtk2.makefile
 	tar xf pkg/gtk+-2.24.33.tar.xz
@@ -5,7 +16,7 @@ gtk2: ./mk/gtk2.makefile
 	patch -p1 -d gtk+-2.24.33 < src/gtk2.24.33-2-embed_wimp.patch
 	patch -p1 -d gtk+-2.24.33 < src/gtk2.24.33-3-ignore-pango-atk-check.patch
 	cd gtk+-2.24.33 && \
-	./configure --host=${CPUARCH}-w64-mingw32 --prefix=${GTK_PREFIX} --enable-static=yes --disable-shared  ac_cv_prog_HAVE_DOXYGEN="false" --enable-gtk-doc=no --enable-gtk-doc-html=no --enable-gtk-doc-pdf=no --enable-explicit-deps --disable-glibtest --disable-modules --disable-cups --disable-test-print-backend --disable-gtk-doc --disable-man --without-x --with-gdktarget=win32 --with-included-immodules --enable-debug=no CPPFLAGS="-O2 -I${GTK_PREFIX}/include" CFLAGS="-O2 -I${GTK_PREFIX}/include -static" CXXFLAGS="-O2 -I${GTK_PREFIX}/include -static" LDFLAGS="-static -L${GTK_PREFIX}/lib" PKG_CONFIG="pkg-config --no-cache --static" && \
+	./configure --host=${CPUARCH}-w64-mingw32 --prefix=${GTK_PREFIX} --enable-static=yes --disable-shared  ac_cv_prog_HAVE_DOXYGEN="false" --enable-gtk-doc=no --enable-gtk-doc-html=no --enable-gtk-doc-pdf=no --enable-explicit-deps --disable-glibtest --disable-modules --disable-cups --disable-test-print-backend --disable-gtk-doc --disable-man --without-x --with-gdktarget=win32 --with-included-immodules --enable-debug=no CPPFLAGS="-O2 -I${GTK_PREFIX}/include" CFLAGS="-O2 -I${GTK_PREFIX}/include -static $(GCC_POSIX_OPT)" CXXFLAGS="-O2 -I${GTK_PREFIX}/include -static $(GXX_POSIX_OPT)" LDFLAGS="-static $(LD_POSIX_OPT) -L${GTK_PREFIX}/lib" PKG_CONFIG="pkg-config --no-cache --static" && \
 	sync; sync; sync && \
 	sed -i 's/-lfreetype_too/-lfreetype/g' ./gtk/Makefile && \
 	sed -i 's/-lharfbuzz_too/-lharfbuzz/g' ./gtk/Makefile && \

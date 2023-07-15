@@ -4,7 +4,7 @@ bzip2: ./mk/bzip2.makefile
 	patch -p1 -d bzip2-1.0.8 < src/bzip2-1-fixes.patch
 	cd bzip2-1.0.8 && \
 	mkdir -p _build && \
-	CPPFLAGS="-I${GTK_PREFIX}/include" CFLAGS="-I${GTK_PREFIX}/include -static" CXXFLAGS="-I${GTK_PREFIX}/include -static" LDFLAGS="-L${GTK_PREFIX}/lib -static" make -j ${JOBS} libbz2.a PREFIX=${GTK_PREFIX} && \
+	CPPFLAGS="-I${GTK_PREFIX}/include" CFLAGS="-O2 -I${GTK_PREFIX}/include -static" CXXFLAGS="-O2 -I${GTK_PREFIX}/include -static" LDFLAGS="-L${GTK_PREFIX}/lib -static" make -j ${JOBS} libbz2.a PREFIX=${GTK_PREFIX} && \
 	ranlib libbz2.a && \
 	install -m644 ./bzlib.h ${GTK_PREFIX}/include/ && \
 	install -m644 ./libbz2.a ${GTK_PREFIX}/lib/

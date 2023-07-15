@@ -1,0 +1,48 @@
+diff -uprN old/gettext-runtime/gnulib-lib/closeout.c new/gettext-runtime/gnulib-lib/closeout.c
+--- old/gettext-runtime/gnulib-lib/closeout.c	2019-05-11 20:29:32.000000000 +0900
++++ new/gettext-runtime/gnulib-lib/closeout.c	2023-07-13 19:24:41.192642600 +0900
+@@ -72,10 +72,10 @@ close_stdout (void)
+   if (ferror (stderr) || fflush (stderr))
+     {
+       fclose (stderr);
+-      exit (EXIT_FAILURE);
++      return;
+     }
+   if (fclose (stderr) && errno != EBADF)
+-    exit (EXIT_FAILURE);
++    return;
+ }
+ 
+ /* Note: When exit (...) calls the atexit-registered
+diff -uprN old/gettext-tools/gnulib-lib/closeout.c new/gettext-tools/gnulib-lib/closeout.c
+--- old/gettext-tools/gnulib-lib/closeout.c	2019-05-11 20:29:32.000000000 +0900
++++ new/gettext-tools/gnulib-lib/closeout.c	2023-07-13 19:25:30.816480900 +0900
+@@ -72,10 +72,10 @@ close_stdout (void)
+   if (ferror (stderr) || fflush (stderr))
+     {
+       fclose (stderr);
+-      exit (EXIT_FAILURE);
++      return;
+     }
+   if (fclose (stderr) && errno != EBADF)
+-    exit (EXIT_FAILURE);
++    return;
+ }
+ 
+ /* Note: When exit (...) calls the atexit-registered
+diff -uprN old/gnulib-local/lib/closeout.c new/gnulib-local/lib/closeout.c
+--- old/gnulib-local/lib/closeout.c	2019-05-11 20:29:32.000000000 +0900
++++ new/gnulib-local/lib/closeout.c	2023-07-13 19:26:18.973235300 +0900
+@@ -72,10 +72,10 @@ close_stdout (void)
+   if (ferror (stderr) || fflush (stderr))
+     {
+       fclose (stderr);
+-      exit (EXIT_FAILURE);
++      return;
+     }
+   if (fclose (stderr) && errno != EBADF)
+-    exit (EXIT_FAILURE);
++    return;
+ }
+ 
+ /* Note: When exit (...) calls the atexit-registered
