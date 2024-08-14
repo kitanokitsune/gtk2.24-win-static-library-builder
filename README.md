@@ -1,5 +1,6 @@
 # gtk2.24-win-static-library-builder
 Build tool of gtk+-2.24.33 static library for windows, using [MXE](https://mxe.cc/) patches.  
+Also complete library files built by gcc 8.1.0 are in [release page](https://github.com/kitanokitsune/gtk2.24-win-static-library-builder/releases).  
 It is useful to build [gerbv](https://github.com/gerbv/gerbv).
 
 ## Requirement
