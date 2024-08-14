@@ -20,7 +20,7 @@ glib: ./mk/glib.makefile
 	tar xfmp ../pkg/glib_subprojects.tar.xz && \
 	rm -rf _build && \
 	mkdir -p _build && \
-	CFLAGS="-I${GTK_PREFIX}/include -static $(GCC_POSIX_OPT)" CXXFLAGS="-I${GTK_PREFIX}/include -static $(GXX_POSIX_OPT)" LDFLAGS="-static $(LD_POSIX_OPT) -L${GTK_PREFIX}/lib" meson --buildtype=release --prefix=${GTK_PREFIX} --default-library static -Dprefer_static=true -Doptimization=2 -Dtests=false -Dforce_posix_threads=$(USE_POSIX_THREAD) _build/ && \
+	CFLAGS="-I${GTK_PREFIX}/include -static $(GCC_POSIX_OPT)" CXXFLAGS="-I${GTK_PREFIX}/include -static $(GXX_POSIX_OPT)" LDFLAGS="-static $(LD_POSIX_OPT) -L${GTK_PREFIX}/lib" meson --buildtype=release --prefix=${GTK_PREFIX} --default-library static -Dprefer_static=true -Dtests=false -Dforce_posix_threads=$(USE_POSIX_THREAD) _build/ && \
 	ninja -j ${JOBS} -C ./_build && \
 	ninja -j 1 -C ./_build install
 

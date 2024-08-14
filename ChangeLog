@@ -1,0 +1,11 @@
+v1.1 (2024-08-14)
+
+	* Downgrade cairo graphic version from 1.17.6 to 1.17.4 due to SVG scaling issue
+	* Correct meson options in mk/glib.makefile
+	* Change icu4c download URL and update version from 66.1 to 74.2 because the former URL was no longer available
+	* Update xz utils from 5.4.3 to 5.6.2
+	* Add Makefile targets: fixbin fixharfbuzz everything
+
+v1.0 (2023-07-23)
+
+	* Initial revision

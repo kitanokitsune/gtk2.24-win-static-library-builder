@@ -86,7 +86,7 @@ export CMAKE_PREFIX_PATH
 
 ALL_TARGETS := atk bzip2 cairo expat fontconfig freetype freetype-bootstrap fribidi gdk-pixbuf gettext giflib glib gtk2 harfbuzz icu4c jasper jpeg libffi libiconv libpng libwebp lzo pango pixman tiff xz zlib
 
-.PHONY: all clean cleanall dlpkg gtkvars test strip fixpc fixla touch
+.PHONY: all clean cleanall dlpkg gtkvars test strip fixpc fixla fixbin fixharfbuzz touch everything
 
 define CLEAN_PROJECT
 	$(shell echo "----------------" 1>&2 && echo "make -f ./mk/$(1).makefile clean" 1>&2 && make -f ./mk/$(1).makefile clean USE_POSIX_THREAD=$(strip $(USE_POSIX_THREAD)) 1>&2)
@@ -98,6 +98,8 @@ endef
 
 
 all: dlpkg gtk2 gtkvars
+
+everything: all strip fixpc fixla fixbin fixharfbuzz touch
 
 dlpkg: ./pkg/Makefile
 	cd ./pkg && \
@@ -129,6 +131,16 @@ fixla:
 	@echo "" 1>&2
 	@echo "========= $(@F) =========" 1>&2
 	./src/_fixla.sh $(GTK_PREFIX)
+
+fixbin:
+	@echo "" 1>&2
+	@echo "========= $(@F) =========" 1>&2
+	./src/_fixbin.sh $(GTK_PREFIX)
+
+fixharfbuzz:
+	@echo "" 1>&2
+	@echo "========= $(@F) =========" 1>&2
+	./src/_fixharfbuzz.sh $(GTK_PREFIX)
 
 touch:
 	@echo "" 1>&2
