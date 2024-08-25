@@ -15,6 +15,7 @@ gtk2: ./mk/gtk2.makefile
 	patch -p1 -d gtk+-2.24.33 < src/gtk2.24.33-1-fixes.patch
 	patch -p1 -d gtk+-2.24.33 < src/gtk2.24.33-2-embed_wimp.patch
 	patch -p1 -d gtk+-2.24.33 < src/gtk2.24.33-3-ignore-pango-atk-check.patch
+	patch -p1 -d gtk+-2.24.33 < src/gtk2.24.33-4-fix-stability-problem-1wj.patch
 	cd gtk+-2.24.33 && \
 	./configure --host=${CPUARCH}-w64-mingw32 --prefix=${GTK_PREFIX} --enable-static=yes --disable-shared  ac_cv_prog_HAVE_DOXYGEN="false" --enable-gtk-doc=no --enable-gtk-doc-html=no --enable-gtk-doc-pdf=no --enable-explicit-deps --disable-glibtest --disable-modules --disable-cups --disable-test-print-backend --disable-gtk-doc --disable-man --without-x --with-gdktarget=win32 --with-included-immodules --enable-debug=no CPPFLAGS="-O2 -I${GTK_PREFIX}/include" CFLAGS="-O2 -I${GTK_PREFIX}/include -static $(GCC_POSIX_OPT)" CXXFLAGS="-O2 -I${GTK_PREFIX}/include -static $(GXX_POSIX_OPT)" LDFLAGS="-static $(LD_POSIX_OPT) -L${GTK_PREFIX}/lib" PKG_CONFIG="pkg-config --no-cache --static" && \
 	sync; sync; sync && \
