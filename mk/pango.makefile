@@ -16,7 +16,7 @@ pango: ./mk/pango.makefile
 	tar xf pkg/pango-1.50.11.tar.xz
 	cd pango-1.50.11 && \
 	mkdir -p _build && \
-	CPPFLAGS="-I$(GTK_PREFIX)/include" CFLAGS="-I$(GTK_PREFIX)/include $(GCC_POSIX_OPT)" CXXFLAGS="-I${GTK_PREFIX}/include $(GXX_POSIX_OPT)" LDFLAGS="$(LD_POSIX_OPT)" LIBS="$(EXTRA_LIBS)" meson --buildtype=release --prefix=${GTK_PREFIX} --default-library static -Dprefer_static=true -Doptimization=2 -Dintrospection=disabled _build/ && \
+	CPPFLAGS="-I$(GTK_PREFIX)/include" CFLAGS="-I$(GTK_PREFIX)/include $(GCC_POSIX_OPT)" CXXFLAGS="-I${GTK_PREFIX}/include $(GXX_POSIX_OPT)" LDFLAGS="$(LD_POSIX_OPT)" LIBS="$(EXTRA_LIBS)" meson --prefix=${GTK_PREFIX} --default-library static -Dprefer_static=true -Ddebug=false -Doptimization=2 -Dintrospection=disabled _build/ && \
 	ninja -j ${JOBS} -C ./_build && \
 	ninja -j 1 -C ./_build install
 

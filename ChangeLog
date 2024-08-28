@@ -1,6 +1,7 @@
-v1.2 (2024-08-25)
+v1.2 (2024-08-29)
 
 	* [fix] A stability problem, and a fix for it (issue #1)
+	* Adjust meson options
 
 v1.1 (2024-08-14)
 

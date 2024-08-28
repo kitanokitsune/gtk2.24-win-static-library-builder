@@ -18,7 +18,7 @@ harfbuzz: ./mk/harfbuzz.makefile
 	cd harfbuzz-7.3.0 && \
 	rm -rf _build && \
 	mkdir -p _build && \
-	PKG_CONFIG="pkg-config --static" CPPFLAGS="-I${GTK_PREFIX}/include" CFLAGS="-I${GTK_PREFIX}/include $(GCC_POSIX_OPT)" CXXFLAGS="-I${GTK_PREFIX}/include $(GXX_POSIX_OPT)" LDFLAGS="$(LD_POSIX_OPT) -static-libgcc -static-libstdc++ -L${GTK_PREFIX}/lib" LIBS="$(EXTRA_LIBS)" meson --buildtype=release --prefix=${GTK_PREFIX} --default-library static -Dprefer_static=true -Doptimization=2 -Dcairo=enabled -Dgdi=enabled -Dtests=disabled -Ddocs=disabled -Dintrospection=disabled _build/ && \
+	PKG_CONFIG="pkg-config --static" CPPFLAGS="-I${GTK_PREFIX}/include" CFLAGS="-I${GTK_PREFIX}/include $(GCC_POSIX_OPT)" CXXFLAGS="-I${GTK_PREFIX}/include $(GXX_POSIX_OPT)" LDFLAGS="$(LD_POSIX_OPT) -static-libgcc -static-libstdc++ -L${GTK_PREFIX}/lib" LIBS="$(EXTRA_LIBS)" meson --prefix=${GTK_PREFIX} --default-library static -Dprefer_static=true -Ddebug=false -Doptimization=2 -Dcairo=enabled -Dgdi=enabled -Dtests=disabled -Ddocs=disabled -Dintrospection=disabled _build/ && \
 	ninja -j ${JOBS} -C ./_build && \
 	ninja -j 1 -C ./_build install
 

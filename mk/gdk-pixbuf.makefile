@@ -10,7 +10,7 @@ gdk-pixbuf: ./mk/gdk-pixbuf.makefile
 	cd gdk-pixbuf-2.42.10 && \
 	rm -rf _build && \
 	mkdir -p _build && \
-	CPPFLAGS="-DGDK_PIXBUF_RELOCATABLE -I${GTK_PREFIX}/include" CFLAGS="-DGDK_PIXBUF_RELOCATABLE -I${GTK_PREFIX}/include -static -static-libgcc" CXXFLAGS="-DGDK_PIXBUF_RELOCATABLE -I${GTK_PREFIX}/include -static -static-libgcc -static-libstdc++" LDFLAGS="-static -static-libgcc -static-libstdc++ -L${GTK_PREFIX}/lib" PKG_CONFIG="pkg-config --static" meson --buildtype=release --prefix=${GTK_PREFIX} --default-library static -Dprefer_static=true -Drelocatable=true -Doptimization=2 -Dgio_sniffing=false -Dinstalled_tests=false -Dintrospection=disabled -Dman=false -Dnative_windows_loaders=true -Dbuiltin_loaders=all _build/ && \
+	CPPFLAGS="-DGDK_PIXBUF_RELOCATABLE -I${GTK_PREFIX}/include" CFLAGS="-DGDK_PIXBUF_RELOCATABLE -I${GTK_PREFIX}/include -static -static-libgcc" CXXFLAGS="-DGDK_PIXBUF_RELOCATABLE -I${GTK_PREFIX}/include -static -static-libgcc -static-libstdc++" LDFLAGS="-static -static-libgcc -static-libstdc++ -L${GTK_PREFIX}/lib" PKG_CONFIG="pkg-config --static" meson --prefix=${GTK_PREFIX} --default-library static -Dprefer_static=true -Drelocatable=true -Ddebug=false -Doptimization=2 -Dgio_sniffing=false -Dinstalled_tests=false -Dintrospection=disabled -Dman=false -Dnative_windows_loaders=true -Dbuiltin_loaders=all _build/ && \
 	ninja -j ${JOBS} -C ./_build && \
 	ninja -j 1 -C ./_build install
 #	sed -i 's|\( \([^ ]\+\) \([^ ]\+\) \([^ ]\+\) \([^ ]\+\)\)\( \2 \3 \4 \5\)\+| \2 \3 \4 \5|g' ${GTK_PREFIX}/lib/pkgconfig/gdk-pixbuf-2.0.pc
