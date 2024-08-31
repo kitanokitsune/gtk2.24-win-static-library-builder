@@ -86,7 +86,7 @@ export CMAKE_PREFIX_PATH
 
 ALL_TARGETS := atk bzip2 cairo expat fontconfig freetype freetype-bootstrap fribidi gdk-pixbuf gettext giflib glib gtk2 harfbuzz icu4c jasper jpeg libffi libiconv libpng libwebp lzo pango pixman tiff xz zlib
 
-.PHONY: all clean cleanall dlpkg gtkvars test strip fixpc fixla fixbin fixharfbuzz touch everything
+.PHONY: all clean cleanall chkreq dlpkg gtkvars test strip fixpc fixla fixbin fixharfbuzz touch everything
 
 define CLEAN_PROJECT
 	$(shell echo "----------------" 1>&2 && echo "make -f ./mk/$(1).makefile clean" 1>&2 && make -f ./mk/$(1).makefile clean USE_POSIX_THREAD=$(strip $(USE_POSIX_THREAD)) 1>&2)
@@ -97,16 +97,34 @@ endef
 
 
 
-all: dlpkg gtk2 gtkvars
+all: chkreq dlpkg gtk2 gtkvars
 
 everything: all strip fixpc fixla fixbin fixharfbuzz touch
 
+chkreq:
+	@echo "" 1>&2
+	@echo "========= $(@F) =========" 1>&2
+	@echo "-> check 7-zip: SEVENZIPBINPATH=$(SEVENZIPBINPATH)" 1>&2
+	@expr "$(SEVENZIPBINPATH)" != "" > /dev/null
+	@ls $(SEVENZIPBINPATH) > /dev/null
+	@$(SEVENZIPBINPATH) > /dev/null
+	@echo "   OK!" 1>&2
+	@echo "" 1>&2
+	@echo "-> check administrative privileges" 1>&2
+	@./src/_chkroot.sh 1>&2
+	@echo "" 1>&2
+
+
 dlpkg: ./pkg/Makefile
+	@echo "" 1>&2
+	@echo "========= $(@F) =========" 1>&2
 	cd ./pkg && \
 	make && \
 	cd ..
 
 gtkvars: ./src/_gtkvars.sh
+	@echo "" 1>&2
+	@echo "========= $(@F) =========" 1>&2
 	@echo "#!/bin/bash" > ./gtkvars.sh
 	@echo "GTK2DIR=$(GTK_PREFIX)" >> ./gtkvars.sh
 	@cat ./src/_gtkvars.sh >> ./gtkvars.sh
