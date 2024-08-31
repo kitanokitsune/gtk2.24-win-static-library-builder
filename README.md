@@ -1,18 +1,22 @@
-# gtk2.24-win-static-library-builder
-Build tool of gtk+-2.24.33 static library for windows, using [MXE](https://mxe.cc/) patches, and complete static library files built by gcc 8.1.0 in [release page](https://github.com/kitanokitsune/gtk2.24-win-static-library-builder/releases).  
+# gtk+-2.24.33-win-static-library-builder
+GTK+-2.24.33 Static Library Build Tool for Windows using [MXE](https://mxe.cc/) patches,  
+ and  
+Complete Static Library Files built by gcc 8.1.0 in [release page](https://github.com/kitanokitsune/gtk2.24-win-static-library-builder/releases)  
+
 It is useful to build [gerbv](https://github.com/gerbv/gerbv).
 
 ## Requirement to build
-+ 7-zip ( C\:\\Program Files\\7-Zip\\7z.exe )
-+ msys2 environment (bash, make, mingw32-make, cmake, meson, ninja, etc.)
-+ mingw-w64 gcc and g++ \: [**i686-8.1.0-release-win32-dwarf-rt_v6-rev0**](https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win32/Personal%20Builds/mingw-builds/8.1.0/threads-win32/dwarf/) and [**x86_64-8.1.0-release-win32-seh-rt_v6-rev0**](https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win64/Personal%20Builds/mingw-builds/8.1.0/threads-win32/seh/) are tested.
++ [**7-zip**](https://www.7-zip.org/) ( C\:\\Program Files\\7-Zip\\7z.exe )
++ [**msys2 environment**](https://www.msys2.org/) with appropriate packages (`pacman -S make autotools gettext-devel gperf patch unzip lzip` for _msys_, `pacman -S mingw-w64-i686-meson mingw-w64-i686-ninja mingw-w64-i686-cmake mingw-w64-i686-make` for _mingw32_, `pacman -S mingw-w64-x86_64-meson mingw-w64-x86_64-ninja mingw-w64-x86_64-cmake mingw-w64-x86_64-make` for _mingw64_)
++ **mingw-w64 gcc and g++** compilers\: [i686-8.1.0-release-win32-dwarf-rt_v6-rev0](https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win32/Personal%20Builds/mingw-builds/8.1.0/threads-win32/dwarf/) and [x86_64-8.1.0-release-win32-seh-rt_v6-rev0](https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win64/Personal%20Builds/mingw-builds/8.1.0/threads-win32/seh/) are tested.
 
-## How to build
+## Build and Install
 1. Clone this project  
-2. Edit `SEVENZIPBINPATH`, `CPUARCH` and `GTK_PREFIX` variables in **Makefile** file  
-3. Run msys2 (bash) ***as administrator***,  then `make` in the msys2 (bash)
-4. Wait for hours
+2. Edit variables `SEVENZIPBINPATH` and `CPUARCH` in _Makefile_ appropriately  
+3. Set installation path to `GTK_PREFIX` variable in _Makefile_  
+4. Run _mingw32.exe_ (32bit) / _mingw64.exe_ (64bit) ***as administrator***,  then `make everything` in it
+5. Wait for hours until completion
 
-## How to use the library
-Exec `source ${GTK_PREFIX}/gtkvars.sh` before use
+## Use the library
+Execute `source ${GTK_PREFIX}/gtkvars.sh` to set environment variables before use the library
 
